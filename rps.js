@@ -38,14 +38,20 @@ function playResults(playerSelection, computerSelection) {
 }
 
 function singleGame(e) {
+    if (gamesPlayed === 5) {
+        startResults();
+    }
     const computerSelection = computerPlay();
     console.log(computerSelection);
     const playerSelection = this.getAttribute('id');
     const roundResult = playResults(playerSelection, computerSelection);
-    updateResults(roundResult);
+    update(roundResult);
 }
 
-function updateResults(roundResult) {
+function update(roundResult) {
+    if (roundResult == 1) winsInt++;
+    if (roundResult == -1) losesInt++;
+    updateResults(winsInt, losesInt);
     playerScore = playerScore + roundResult;
     gamesPlayed++;
     if (gamesPlayed === 5) {
@@ -59,14 +65,21 @@ function updateResults(roundResult) {
             console.log('Computer won!');
             gameResults.textContent = 'Comupter won!';
         }
-        playerScore = 0;
-        gamesPlayed = 0;
     }
-    return playerScore;
 }
 
-let playerScore = 0;
-let gamesPlayed = 0;
+function updateResults(winsInt, losesInt) {
+    wins.textContent = winsInt;
+    loses.textContent = losesInt;
+}
+
+function startResults() {
+    playerScore = 0;
+    gamesPlayed = 0;
+    winsInt = 0;
+    losesInt = 0;
+    gameResults.textContent = '';
+}
 
 const currentGame = document.querySelector('.current');
 const wins = document.querySelector('.wins');
@@ -75,3 +88,5 @@ const gameResults = document.querySelector('.gameResults');
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach(button => button.addEventListener('click', singleGame));
+
+startResults();
